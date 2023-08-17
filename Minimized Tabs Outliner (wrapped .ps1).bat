@@ -11,6 +11,13 @@ start chrome --start-maximized
 
 while ($true)
 {
+    $LogonUI = Get-Process | where { $_.name -eq "LogonUI" }
+    if (!$LogonUI) { break }
+    Start-Sleep -Milliseconds 50
+}
+
+while ($true)
+{
     $TabsOutliner = Get-Process | where { $_.name -eq "chrome" -and $_.mainwindowtitle -eq "Tabs Outliner" }
     if ($TabsOutliner) { break }
     Start-Sleep -Milliseconds 50
