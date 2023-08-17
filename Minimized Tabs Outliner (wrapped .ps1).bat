@@ -6,15 +6,16 @@
 #>
 # PowerShell Script Section
 
-# starting chrome maximized and don't forget to make the shortcut on your desktop do the same, otherwise it won't always be maximized and WinSize2 fixes position and size of tabs outliner
-start chrome --start-maximized
-
+# waiting on the user to log on so that WinSize2 becomes operational
 while ($true)
 {
     $LogonUI = Get-Process | where { $_.name -eq "LogonUI" }
     if (!$LogonUI) { break }
     Start-Sleep -Milliseconds 50
 }
+
+# starting chrome maximized and don't forget to make the shortcut on your desktop do the same, otherwise it won't always be maximized and WinSize2 fixes position and size of tabs outliner
+start chrome --start-maximized
 
 while ($true)
 {
