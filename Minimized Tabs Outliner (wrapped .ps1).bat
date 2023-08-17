@@ -14,7 +14,7 @@ while ($true)
     Start-Sleep -Milliseconds 50
 }
 
-# starting chrome maximized and don't forget to make the shortcut on your desktop do the same, otherwise it won't always be maximized and WinSize2 fixes position and size of tabs outliner
+# starting chrome maximized and don't forget to make the chrome shortcut do the same, otherwise it won't always be maximized and WinSize2 fixes position and size of tabs outliner
 start chrome --start-maximized
 
 while ($true)
