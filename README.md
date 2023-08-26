@@ -3,7 +3,7 @@ IMPORTANT: the following title in the script must be made identical to the one t
 
 The powershell wrapper/batch-powershell hybrid makes using the powershell script as easy as with any other executable file. Easily run the embedded powershell script by double-clicking the .bat file. It also makes it super easy when you create a shortcut of it, which I recommended you do to make it run minimized as well. Simply right-click the .bat file and then click on "Create shortcut". These actions won't work with non-wrapped .ps1 files and would've required a more difficult workflow, which isn't particularly straightforward for end users. After you have made the shortcut, you have to make it run at startup by pressing the `WinKey + R`, then copy and paste the following text into the **Run** dialog box: `shell:startup`. Then the startup folder will open in which the shortcut has to be placed. After this you're done.
 
-You can also run the .bat file completely hidden at startup by using the following AutoHotKey script instead of a shortcut, and ofcourse placed in the startup folder (replace `XXX` and use the official file name):
+You can also run the .bat file completely hidden at startup by using the following AutoHotKey script instead of a shortcut, and ofcourse placed in the startup folder (replace `XXX` with your Windows account name):
 ```
 #Requires AutoHotkey 2.0.5
 #NoTrayIcon
