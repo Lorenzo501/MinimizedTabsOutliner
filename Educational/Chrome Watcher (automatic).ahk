@@ -32,10 +32,7 @@ ChromeWatcher()
             logger.Read(0) ; Flush buffer
 
             if ((title ?? 0) = "Tabs Outliner")
-            {
-                DllCall("UnhookWinEvent", "Ptr", hWinEventHook)
                 ExitApp()
-            }
         }
     }
 
