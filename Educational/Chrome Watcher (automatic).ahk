@@ -4,8 +4,7 @@ Persistent()
 ChromeWatcher()
 ChromeWatcher()
 {
-    static index := 0
-    static logger := FileOpen(A_Desktop "\logger.txt", 0x101)
+    static index := 0, logger := FileOpen(A_Desktop "\logger.txt", 0x101)
     logger.WriteLine("  # | Event      | Event Name                  | hWnd (hex) | hWnd (dec) | Title")
 
     DllCall("SetWinEventHook",
