@@ -1,8 +1,11 @@
 # Windows API (Accessibility)
-https://learn.microsoft.com/en-us/windows/win32/winauto/event-constants
-https://learn.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-setwineventhook
-https://learn.microsoft.com/en-us/windows/win32/api/winuser/nc-winuser-wineventproc
-https://learn.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-unhookwinevent
+[Event Constants](https://learn.microsoft.com/en-us/windows/win32/winauto/event-constants)
+
+[SetWinEventHook function](https://learn.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-setwineventhook)
+
+[WinEventProc callback function](https://learn.microsoft.com/en-us/windows/win32/api/winuser/nc-winuser-wineventproc)
+
+[UnhookWinEvent function](https://learn.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-unhookwinevent)
 
 # Chrome Watcher (automatic).ahk
 IMPORTANT: this AHK script expects Tabs Outliner to appear and uses this as the cue to stop the script. So make sure that Tabs Outliner gets started automatically at chrome startup and close all chrome windows (including Tabs Outliner) before you use this script. When you start this script, chrome will start automatically and you'll get a logger.txt on your desktop with all the chrome/Tabs Outliner event data.
