@@ -1,10 +1,7 @@
 # Windows API (Accessibility)
-[Event Constants](https://learn.microsoft.com/en-us/windows/win32/winauto/event-constants)
-
-[SetWinEventHook function](https://learn.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-setwineventhook)
-
-[WinEventProc callback function](https://learn.microsoft.com/en-us/windows/win32/api/winuser/nc-winuser-wineventproc)
-
+[Event Constants](https://learn.microsoft.com/en-us/windows/win32/winauto/event-constants)  
+[SetWinEventHook function](https://learn.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-setwineventhook)  
+[WinEventProc callback function](https://learn.microsoft.com/en-us/windows/win32/api/winuser/nc-winuser-wineventproc)  
 [UnhookWinEvent function](https://learn.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-unhookwinevent)
 
 # Chrome Watcher (automatic).ahk
