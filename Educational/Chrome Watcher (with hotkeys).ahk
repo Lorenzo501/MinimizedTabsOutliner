@@ -23,7 +23,7 @@ ChromeWatcher()
 
     EventWatcher(hWinEventHook, event, hWnd, *)
     {
-        Critical()
+        Critical(-1)
 
         try if (WinGetProcessName(hWnd) = "chrome.exe")
         {
