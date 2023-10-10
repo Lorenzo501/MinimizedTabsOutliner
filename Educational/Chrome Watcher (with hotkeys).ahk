@@ -23,8 +23,6 @@ ChromeWatcher()
 
     EventWatcher(hWinEventHook, event, hWnd, *)
     {
-        Critical()
-
         try if (WinGetProcessName(hWnd) = "chrome.exe")
         {
             try title := WinGetTitle(hWnd)
