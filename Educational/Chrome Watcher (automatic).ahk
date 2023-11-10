@@ -1,35 +1,38 @@
-#Requires AutoHotkey v2.0
+#Requires AutoHotkey 2.0
 Persistent()
-
 ChromeWatcher()
+
 ChromeWatcher()
 {
     static index := 0, logger := FileOpen(A_Desktop "\logger.txt", 0x101)
-    logger.WriteLine("  # | Event      | Event Name                  | hWnd (hex) | hWnd (dec) | Title")
+    logger.WriteLine("  # | Event      | Event Name                  | hWnd (hex) | hWnd (dec) | Window Title")
 
     DllCall("SetWinEventHook",
         "UInt", 0x00000001, ; EVENT_MIN
         "UInt", 0x7FFFFFFF, ; EVENT_MAX
         "Ptr", 0,
-        "Ptr", CallbackCreate(EventWatcher),
+        "Ptr", CallbackCreate(HandleWinEvent),
         "UInt", 0,
         "UInt", 0,
         "UInt", 0)
-
     Run("chrome.exe --start-maximized")
 
-    EventWatcher(hWinEventHook, event, hWnd, *)
+    HandleWinEvent(hWinEventHook, event, hWnd, *)
     {
         try if (WinGetProcessName(hWnd) = "chrome.exe")
         {
-            try title := WinGetTitle(hWnd)
+            try windowTitle := WinGetTitle(hWnd)
             eventName := Events(event, &eventHex)
-            txt := Format("{1:3} | {2:-10} | {3:-27} | 0x{4:08X} | {4:-10} | {5}", ++index, eventHex, eventName, hWnd, title?)
-            logger.WriteLine(txt)
-            logger.Read(0) ; Flush buffer
+            text := Format("{1:3} | {2:-10} | {3:-27} | 0x{4:08X} | {4:10} | {5}", ++index, eventHex, eventName, hWnd, windowTitle?)
+            logger.WriteLine(text)
+            logger.Read(0) ; Flush buffer (sometimes necessary to guarantee the proper write order)
 
-            if ((title ?? 0) = "Tabs Outliner")
+            if ((windowTitle ?? 0) = "Tabs Outliner")
+            {
+                TrayTip("Finished", "Chrome Watcher", 0x34)
+                Sleep(4000)
                 ExitApp()
+            }
         }
     }
 
