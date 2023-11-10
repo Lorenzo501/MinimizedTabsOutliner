@@ -73,7 +73,7 @@ ChromeWatcher(shouldRunChrome?, shouldOnlyReturnHook := false)
 
 Dbg(text?, resetMode?, shouldToggleAlwaysOnTop := false)
 {
-    static _gui, WM_GETTEXTLENGTH := 0x0000000E, EM_SETSEL := 0x000000B1, EM_REPLACESEL := 0x000000C2, edit, WS_HSCROLL := "0x100000", WS_VSCROLL := "0x200000", rowCount := 1
+    static _gui, edit, WS_HSCROLL := "0x100000", WS_VSCROLL := "0x200000", rowCount := 1
     static header := "  # | Interval (ms) | Event      | Event Name                                    | hWnd (hex) | hWnd (dec) | Window Title`r`n"
 
     if (IsSet(_gui))
@@ -108,9 +108,7 @@ Dbg(text?, resetMode?, shouldToggleAlwaysOnTop := false)
                 ControlSetStyle("+" WS_VSCROLL, edit)
         }
 
-        ;SendMessage(EM_SETSEL, -1, -1,, _gui["Edit1"])
-        ;SendMessage(EM_REPLACESEL, false, StrPtr(text),, _gui["Edit1"])
-edit.text .= text ; DOESN'T HAVE UPDATE ISSUES WHEN THE USER CLICKS THE EDIT CONTROL WHILE HOOKED (the EM_REPLACESEL above does have that issue)
+        edit.text .= text
     }
     else
     {
@@ -125,12 +123,5 @@ edit.text .= text ; DOESN'T HAVE UPDATE ISSUES WHEN THE USER CLICKS THE EDIT CON
         hiddenButton := _gui.AddButton("-Tabstop y-100")
         edit := _gui.AddEdit("ReadOnly -VScroll -Wrap x10 w1000 h1080", header)
         _gui.Show()
-        ;pos := SendMessage(WM_GETTEXTLENGTH, 0, 0,, _gui["Edit1"])
-        ;SendMessage(EM_SETSEL, pos, pos,, _gui["Edit1"])
     }
 }
-
-; https://learn.microsoft.com/en-us/windows/win32/winmsg/wm-gettextlength
-; https://learn.microsoft.com/en-us/windows/win32/controls/em-setsel
-; https://learn.microsoft.com/en-us/windows/win32/controls/em-replacesel
-; https://www.magnumdb.com/search?q=title%3AWM_GETTEXTLENGTH+OR+title%3AEM_SETSEL+OR+title%3AEM_REPLACESEL
