@@ -6,7 +6,7 @@
 * [WinEventProc callback function](https://learn.microsoft.com/en-us/windows/win32/api/winuser/nc-winuser-wineventproc)  
 * [UnhookWinEvent function](https://learn.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-unhookwinevent)
 
-### Performance Counter
+### Performance Counter <!-- a.k.a. QPC (Query Performance Counter) -->
 * [QueryPerformanceFrequency function](https://learn.microsoft.com/en-us/windows/win32/api/profileapi/nf-profileapi-queryperformancefrequency)
 * [QueryPerformanceCounter function](https://learn.microsoft.com/en-us/windows/win32/api/profileapi/nf-profileapi-queryperformancecounter)
 
