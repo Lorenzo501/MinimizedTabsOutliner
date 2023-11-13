@@ -133,7 +133,6 @@ Dbg(resetMode?, shouldToggleAlwaysOnTop := false, shouldReturnListView := false,
             listView.ModifyCol(col, "Right")
 
         _gui.Show()
-        VarSetStrCapacity(&text, 200000) ; Optimization
 
         ExportToTextFile()
         {
