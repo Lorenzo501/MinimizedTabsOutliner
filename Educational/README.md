@@ -7,6 +7,7 @@
 * [UnhookWinEvent function](https://learn.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-unhookwinevent)
 
 ### Performance Counter
+* [QueryPerformanceFrequency function](https://learn.microsoft.com/en-us/windows/win32/api/profileapi/nf-profileapi-queryperformancefrequency)
 * [QueryPerformanceCounter function](https://learn.microsoft.com/en-us/windows/win32/api/profileapi/nf-profileapi-queryperformancecounter)
 
 # [Chrome Watcher (automatic)](https://github.com/Lorenzo501/MinimizedTabsOutliner.ahk/blob/main/Educational/Chrome%20Watcher%20(automatic).ahk)
