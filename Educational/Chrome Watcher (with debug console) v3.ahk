@@ -119,6 +119,8 @@ class Dbg
 
         loop (this.ListView.GetCount("Column"))
             this.ListView.ModifyCol(A_Index, "AutoHdr")
+
+        Sleep(-1) ; Force immediate redraw
     }
 
     static Reset(mode)
