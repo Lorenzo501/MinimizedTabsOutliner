@@ -113,6 +113,8 @@ Dbg(resetMode?, shouldToggleAlwaysOnTop := false, shouldReturnListView := false,
 
         loop (listView.GetCount("Column"))
             listView.ModifyCol(A_Index, "AutoHdr")
+
+        Sleep(-1) ; Force immediate redraw
     }
     else
     {
