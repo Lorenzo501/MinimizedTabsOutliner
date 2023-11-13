@@ -109,6 +109,7 @@ Dbg(text?, resetMode?, shouldToggleAlwaysOnTop := false)
         }
 
         edit.text .= text
+        Sleep(-1) ; Force immediate redraw
     }
     else
     {
