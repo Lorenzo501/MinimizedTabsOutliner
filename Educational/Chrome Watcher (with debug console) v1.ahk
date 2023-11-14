@@ -108,24 +108,14 @@ Dbg(text?, resetMode?, shouldToggleAlwaysOnTop := false)
                 ControlSetStyle("+" WS_VSCROLL, edit)
         }
 
-; https://learn.microsoft.com/en-us/windows/win32/winmsg/wm-gettextlength
-; https://learn.microsoft.com/en-us/windows/win32/controls/em-setsel
-; https://learn.microsoft.com/en-us/windows/win32/controls/em-replacesel
-; https://www.magnumdb.com/search?q=title%3AWM_GETTEXTLENGTH+OR+title%3AEM_SETSEL+OR+title%3AEM_REPLACESEL
-        ; Someone claimed that this is faster, that it appends rather than reset the control (these should all be used together here to keep the caret at the proper place)
-        ;pos := SendMessage(WM_GETTEXTLENGTH, 0, 0,, _gui["Edit1"])
-        ;SendMessage(EM_SETSEL, pos, pos,, _gui["Edit1"])
-        ;SendMessage(EM_SETSEL, -1, -1,, _gui["Edit1"])
-        ;SendMessage(EM_REPLACESEL, false, StrPtr(text),, _gui["Edit1"])
-
-        edit.text .= text ; This also works fine though and is obviously much easier to understand!
+        edit.text .= text
         Sleep(-1) ; Force immediate redraw
     }
     else
     {
         _gui := Gui("+AlwaysOnTop -Theme", "Debug Console")
         _gui.OnEvent("Close", (*) => ExitApp())
-        _gui.SetFont("", "Consolas")
+        _gui.SetFont(, "Consolas") ; Monospaced font
         _gui.AddButton(, "Hook/Unhook && Run Chrome").OnEvent("Click", (*) => (ChromeWatcher(true), ControlClick(hiddenButton)))
         _gui.AddButton("x+6", "Hook/Unhook").OnEvent("Click", (*) => (ChromeWatcher(false), ControlClick(hiddenButton)))
         _gui.AddButton("x+6", "Close Chrome").OnEvent("Click", (*) => (ProcessClose("chrome.exe"), ControlClick(hiddenButton)))
