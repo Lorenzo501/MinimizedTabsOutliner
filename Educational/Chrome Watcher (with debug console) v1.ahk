@@ -108,7 +108,17 @@ Dbg(text?, resetMode?, shouldToggleAlwaysOnTop := false)
                 ControlSetStyle("+" WS_VSCROLL, edit)
         }
 
-        edit.text .= text
+; https://learn.microsoft.com/en-us/windows/win32/winmsg/wm-gettextlength
+; https://learn.microsoft.com/en-us/windows/win32/controls/em-setsel
+; https://learn.microsoft.com/en-us/windows/win32/controls/em-replacesel
+; https://www.magnumdb.com/search?q=title%3AWM_GETTEXTLENGTH+OR+title%3AEM_SETSEL+OR+title%3AEM_REPLACESEL
+        ; Someone claimed that this is faster, that it appends rather than reset the control (these should all be used together here to keep the caret at the proper place)
+        ;pos := SendMessage(WM_GETTEXTLENGTH, 0, 0,, _gui["Edit1"])
+        ;SendMessage(EM_SETSEL, pos, pos,, _gui["Edit1"])
+        ;SendMessage(EM_SETSEL, -1, -1,, _gui["Edit1"])
+        ;SendMessage(EM_REPLACESEL, false, StrPtr(text),, _gui["Edit1"])
+
+        edit.text .= text ; This also works fine though and is obviously much easier to understand!
         Sleep(-1) ; Force immediate redraw
     }
     else
