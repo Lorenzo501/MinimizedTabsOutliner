@@ -83,7 +83,7 @@ class Dbg
 
         this._Gui := Gui("+AlwaysOnTop -Theme", "Debug Console")
         this._Gui.OnEvent("Close", (*) => ExitApp())
-        this._Gui.SetFont(, "Consolas")
+        this._Gui.SetFont(, "Verdana")
         this._Gui.AddButton(, "Hook/Unhook && Run Chrome").OnEvent("Click", (*) => (ChromeWatcher._Hook ? ChromeWatcher.Unhook() : ChromeWatcher.Hook(true), ControlClick(hiddenButton)))
         this._Gui.AddButton("x+6", "Hook/Unhook").OnEvent("Click", (*) => (ChromeWatcher._Hook ? ChromeWatcher.Unhook() : ChromeWatcher.Hook(false), ControlClick(hiddenButton)))
         this._Gui.AddButton("x+6", "Close Chrome").OnEvent("Click", (*) => (ProcessClose("chrome.exe"), ControlClick(hiddenButton)))
