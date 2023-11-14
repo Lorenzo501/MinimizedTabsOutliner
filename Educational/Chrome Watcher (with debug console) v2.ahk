@@ -120,7 +120,7 @@ Dbg(resetMode?, shouldToggleAlwaysOnTop := false, shouldReturnListView := false,
     {
         _gui := Gui("+AlwaysOnTop -Theme", "Debug Console")
         _gui.OnEvent("Close", (*) => ExitApp())
-        _gui.SetFont(, "Consolas")
+        _gui.SetFont(, "Verdana")
         _gui.AddButton(, "Hook/Unhook && Run Chrome").OnEvent("Click", (*) => (ChromeWatcher(true), ControlClick(hiddenButton)))
         _gui.AddButton("x+6", "Hook/Unhook").OnEvent("Click", (*) => (ChromeWatcher(false), ControlClick(hiddenButton)))
         _gui.AddButton("x+6", "Close Chrome").OnEvent("Click", (*) => (ProcessClose("chrome.exe"), ControlClick(hiddenButton)))
