@@ -158,7 +158,7 @@ Dbg(resetMode?, shouldToggleAlwaysOnTop := false, shouldReturnListView := false,
     selectedRow := listView.GetNext() + 1
     shouldSelectNextRow := false
 
-    Loop Parse, text, "`n"
+    loop parse (text), "`n"
     {
         if (!shouldSelectNextRow)
             if (A_Index = selectedRow)
