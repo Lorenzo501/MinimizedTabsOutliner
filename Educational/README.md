@@ -21,7 +21,7 @@ And if you don't want chrome event data of chrome windows that were already open
 Writes to TXT, functions only and has 6 hotkeys (basic).
 
 # Chrome Watcher (with debug console)
-[![](https://github.com/Lorenzo501/MinimizedTabsOutliner.ahk/blob/main/Educational/Chrome%20Watcher%20(with%20debug%20console)%20v3.png)](#)
+[![](https://raw.githubusercontent.com/Lorenzo501/MinimizedTabsOutliner.ahk/main/Educational/Snippet.png)](#)
 
 ### [Version 1 (intermediate)](https://github.com/Lorenzo501/MinimizedTabsOutliner.ahk/blob/main/Educational/Chrome%20Watcher%20(with%20debug%20console)%20v1.ahk)
 Edit control, functions only and has 5 buttons.
