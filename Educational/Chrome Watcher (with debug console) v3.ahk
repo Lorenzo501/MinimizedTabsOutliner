@@ -146,7 +146,7 @@ class Dbg
     selectedRow := Dbg.ListView.GetNext() + 1
     shouldSelectNextRow := false
 
-    Loop Parse, Dbg.Text, "`n"
+    loop parse (Dbg.Text), "`n"
     {
         if (!shouldSelectNextRow)
             if (A_Index = selectedRow)
