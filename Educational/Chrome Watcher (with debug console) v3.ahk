@@ -12,7 +12,7 @@ class ChromeWatcher
         this.Cb := CallbackCreate((params*) => (this.HandleWinEvent)(this, params*),, this.HandleWinEvent.MaxParams - 1)
     }
 
-    static Hook(shouldRunChrome?)
+    static Hook(shouldRunChrome := false)
     {
         this.Index := 0
         Dbg.Reset(1)
@@ -85,7 +85,7 @@ class Dbg
         this._Gui.OnEvent("Close", (*) => ExitApp())
         this._Gui.SetFont(, "Verdana")
         this._Gui.AddButton(, "Hook/Unhook && Run Chrome").OnEvent("Click", (*) => (ChromeWatcher._Hook ? ChromeWatcher.Unhook() : ChromeWatcher.Hook(true), ControlClick(hiddenButton)))
-        this._Gui.AddButton("x+6", "Hook/Unhook").OnEvent("Click", (*) => (ChromeWatcher._Hook ? ChromeWatcher.Unhook() : ChromeWatcher.Hook(false), ControlClick(hiddenButton)))
+        this._Gui.AddButton("x+6", "Hook/Unhook").OnEvent("Click", (*) => (ChromeWatcher._Hook ? ChromeWatcher.Unhook() : ChromeWatcher.Hook(), ControlClick(hiddenButton)))
         this._Gui.AddButton("x+6", "Close Chrome").OnEvent("Click", (*) => (ProcessClose("chrome.exe"), ControlClick(hiddenButton)))
         this._Gui.AddButton("x+6", "Always On Top").OnEvent("Click", (*) => (Dbg.ToggleAlwaysOnTop(), ControlClick(hiddenButton)))
         this._Gui.AddButton("x+6", "Point Marker").OnEvent("Click", (*) => (ChromeWatcher._Hook ? Dbg.Update() : Exit(), ControlClick(hiddenButton)))
