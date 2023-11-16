@@ -3,7 +3,7 @@
 A_WinDelay := -1
 Dbg()
 
-ChromeWatcher(shouldRunChrome?, shouldOnlyReturnHook := false)
+ChromeWatcher(shouldRunChrome := false, shouldOnlyReturnHook := false)
 {
     static EVENT_MIN := 0x00000001, EVENT_MAX := 0x7FFFFFFF, hook := 0, cb := CallbackCreate(HandleWinEvent), index, qpf, qpcPrevious
 
@@ -117,7 +117,7 @@ Dbg(text?, resetMode?, shouldToggleAlwaysOnTop := false)
         _gui.OnEvent("Close", (*) => ExitApp())
         _gui.SetFont(, "Consolas") ; Monospaced font
         _gui.AddButton(, "Hook/Unhook && Run Chrome").OnEvent("Click", (*) => (ChromeWatcher(true), ControlClick(hiddenButton)))
-        _gui.AddButton("x+6", "Hook/Unhook").OnEvent("Click", (*) => (ChromeWatcher(false), ControlClick(hiddenButton)))
+        _gui.AddButton("x+6", "Hook/Unhook").OnEvent("Click", (*) => (ChromeWatcher(), ControlClick(hiddenButton)))
         _gui.AddButton("x+6", "Close Chrome").OnEvent("Click", (*) => (ProcessClose("chrome.exe"), ControlClick(hiddenButton)))
         _gui.AddButton("x+6", "Always On Top").OnEvent("Click", (*) => (Dbg(,, true), ControlClick(hiddenButton)))
         _gui.AddButton("x+6", "Point Marker").OnEvent("Click", (*) => (ChromeWatcher(, true) ? Dbg("____POINT MARKER____`r`n") : Exit(), ControlClick(hiddenButton)))
