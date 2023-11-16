@@ -1,6 +1,6 @@
 #Requires AutoHotkey 2.0
 
-ChromeWatcher(shouldRunChrome)
+ChromeWatcher(shouldRunChrome := false)
 {
     static EVENT_MIN := 0x00000001, EVENT_MAX := 0x7FFFFFFF, hook := 0, cb := CallbackCreate(HandleWinEvent), index, file
 
@@ -87,7 +87,7 @@ Logger(text, shouldOpenFile := false)
 }
 
 F1::ChromeWatcher(true) ; Hook/unhook and runs chrome
-F2::ChromeWatcher(false) ; Hook/unhook
+F2::ChromeWatcher() ; Hook/unhook
 F3::ProcessClose("chrome.exe") ; Closes all chrome windows (warning: chrome will think it crashed but the F1 and F2 hotkey hides the warning)
 F4::FileExist(A_Desktop "\logger.txt") ? Run("notepad.exe " A_Desktop "\logger.txt") : Exit()
 F5::try Logger("___POINT MARKER___")
