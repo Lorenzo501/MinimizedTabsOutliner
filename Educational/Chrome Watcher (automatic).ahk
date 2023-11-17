@@ -21,13 +21,13 @@ ChromeWatcher()
     {
         try if (WinGetProcessName(hWnd) = "chrome.exe")
         {
-            try windowTitle := WinGetTitle(hWnd)
+            try winTitle := WinGetTitle(hWnd)
             eventName := Events(event, &eventHex)
-            text := Format("{1:3} | {2:-10} | {3:-27} | 0x{4:08X} | {4:10} | {5}", ++index, eventHex, eventName, hWnd, windowTitle?)
+            text := Format("{1:3} | {2:-10} | {3:-27} | 0x{4:08X} | {4:10} | {5}", ++index, eventHex, eventName, hWnd, winTitle?)
             logger.WriteLine(text)
             logger.Read(0) ; Flush buffer (sometimes necessary to guarantee the proper write order)
 
-            if ((windowTitle ?? 0) = "Tabs Outliner")
+            if ((winTitle ?? 0) = "Tabs Outliner")
             {
                 TrayTip("Finished", "Chrome Watcher", 0x34)
                 Sleep(4000)
