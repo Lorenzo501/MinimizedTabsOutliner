@@ -28,9 +28,9 @@ ChromeWatcher(shouldRunChrome := false)
     {
         try if (WinGetProcessName(hWnd) = "chrome.exe")
         {
-            try windowTitle := WinGetTitle(hWnd)
+            try winTitle := WinGetTitle(hWnd)
             eventName := Events(event, &eventHex)
-            text := Format("{1:3} | {2:-10} | {3:-27} | 0x{4:08X} | {4:10} | {5}", ++index, eventHex, eventName, hWnd, windowTitle?)
+            text := Format("{1:3} | {2:-10} | {3:-27} | 0x{4:08X} | {4:10} | {5}", ++index, eventHex, eventName, hWnd, winTitle?)
             Logger(text)
         }
     }
