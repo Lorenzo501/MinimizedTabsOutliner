@@ -30,15 +30,16 @@ ChromeWatcher(shouldRunChrome := false, shouldOnlyReturnHook := false)
 
     HandleWinEvent(hWinEventHook, event, hWnd, *)
     {
-        try if (WinGetProcessName(hWnd) = "chrome.exe")
-        {
-            try winTitle := WinGetTitle(hWnd)
-            eventName := Events(event, &eventHex)
-            DllCall("QueryPerformanceCounter", "Int64*", &qpc := 0)
-            text := Format("{1:3} | {2:13} | {3:-10} | {4:-45} | 0x{5:08X} | {5:10} | {6}`r`n", ++index, Round((qpc - qpcPrevious) / qpf * 1000), eventHex, eventName, hWnd, winTitle?)
-            Dbg(text)
-            qpcPrevious := qpc
-        }
+        try
+            if (WinGetProcessName(hWnd) = "chrome.exe")
+            {
+                try winTitle := WinGetTitle(hWnd)
+                eventName := Events(event, &eventHex)
+                DllCall("QueryPerformanceCounter", "Int64*", &qpc := 0)
+                text := Format("{1:3} | {2:13} | {3:-10} | {4:-45} | 0x{5:08X} | {5:10} | {6}`r`n", ++index, Round((qpc - qpcPrevious) / qpf * 1000), eventHex, eventName, hWnd, winTitle?)
+                Dbg(text)
+                qpcPrevious := qpc
+            }
     }
 
     Events(event, &eventHex?)
