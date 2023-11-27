@@ -33,14 +33,15 @@ class ChromeWatcher
 
     static HandleWinEvent(hWinEventHook, event, hWnd, *)
     {
-        try if (WinGetProcessName(hWnd) = "chrome.exe")
-        {
-            try winTitle := WinGetTitle(hWnd)
-            eventName := this.Events(event, &eventHex)
-            DllCall("QueryPerformanceCounter", "Int64*", &qpc := 0)
-            Dbg.Update(++this.Index, Round((qpc - this.QpcPrevious) / this.Qpf * 1000), eventHex, eventName, hWnd, winTitle?)
-            this.QpcPrevious := qpc
-        }
+        try
+            if (WinGetProcessName(hWnd) = "chrome.exe")
+            {
+                try winTitle := WinGetTitle(hWnd)
+                eventName := this.Events(event, &eventHex)
+                DllCall("QueryPerformanceCounter", "Int64*", &qpc := 0)
+                Dbg.Update(++this.Index, Round((qpc - this.QpcPrevious) / this.Qpf * 1000), eventHex, eventName, hWnd, winTitle?)
+                this.QpcPrevious := qpc
+            }
     }
 
     static Events(event, &eventHex?)
