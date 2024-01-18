@@ -1,0 +1,5 @@
+I noticed that if you click the green X to close and save something in tabs outliner
+and if you then close Tabs Outliner too fast afterwards, then it won't have enough time to save the closed tab(s)
+in which case they'll disappear from tabs outliner entirely as if they were closed normally..
+I can improve this by having a lightweight AHK script to stay active while the Tabs Outliner window exists
+so I could even start TabsOutlinerAssist.ahk with MinimizedTabsOutliner.ahk^^ using cmd line arg --assist
