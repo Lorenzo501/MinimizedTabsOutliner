@@ -35,6 +35,7 @@
 	#SingleInstance Off
 	DetectHiddenWindows Off    ; which is the default
 	;#NoTrayIcon               ; do not show any icon
+Menu, Tray, Icon,,, 1 ; b/c otherwise the icon will often get stuck on the pause icon somehow (w/o actually being in the pause/suspend state)
 	vMenuTrayIcon_Show := 0
 	mMenuTrayIcon()
 
@@ -63,7 +64,7 @@ NachHotkey:
 	Tooltip_Show_Tip      := 0
 	Tooltip_Show_Store    := 0
 	Tooltip_Show_Pause    := 0
-	Tooltip_Show_Numbers  := 1
+	Tooltip_Show_Numbers  := 0
 	DesktopIcon_CheckAfterLogin := 1
 
 	; 0: no log
@@ -76,13 +77,13 @@ NachHotkey:
 	If ( Tooltip_Show_Tip )
 		Tooltip_Show_Store  := 1
 
-	Tooltip_Show_Tip_SignOn  := 1
+	Tooltip_Show_Tip_SignOn  := 0
 	Exclude_List_Timer_Add := 1000
 	vLang_Message = 1
 	AW_AsBefore := 1
 	AA1 = 
 
-	vIniScreen_Logo_Show := TRUE
+	vIniScreen_Logo_Show := FALSE
 	split_FullScr_Sum = {Return}
 
 	#Include inc_vProgramName.ahk
@@ -458,7 +459,7 @@ mActWin_Init( Zeit )
 	split_MatchMode := 3	 ; --- Wintitle / 2: contains / 3: exact match
 	vTitleTimer := Zeit
 
-	Settimer, mActWin_Timer, %Zeit%
+	;Settimer, mActWin_Timer, %Zeit%
 
 /*
 Return
@@ -477,42 +478,106 @@ mActWin_Init( Zeit )
 
 	OnMessage( MsgNum, "ShellMessage" )
 
-	Settimer, mActWin_Timer, %Zeit%
+        ;https://www.magnumdb.com/search?q=title%3AEVENT_SYSTEM_FOREGROUND+OR+title%3AEVENT_OBJECT_DESTROY
+        EVENT_SYSTEM_FOREGROUND := 3
+        ;EVENT_OBJECT_DESTROY := 32769 ; gets triggered non-stop, so I'll just keep using the shell hook for that
+        DllCall("SetWinEventHook", "UInt", EVENT_SYSTEM_FOREGROUND, "UInt", EVENT_SYSTEM_FOREGROUND, "Ptr", 0, "Ptr", RegisterCallback("HandleWinEvent"), "UInt", 0, "UInt", 0, "UInt", 0)
+        ;DllCall("SetWinEventHook", "UInt", EVENT_OBJECT_DESTROY, "UInt", EVENT_OBJECT_DESTROY, "Ptr", 0, "Ptr", RegisterCallback("HandleWinEvent"), "UInt", 0, "UInt", 0, "UInt", 0)
 
+	;Settimer, mActWin_Timer, %Zeit%
+
+Return
+}
+
+HandleWinEvent(hWinEventHook, event, hWnd, _*)
+{
+	if (A_IsPaused)
+		Return
+
+        ; This skips specific EVENT_OBJECT_DESTROY events that are unnecessary (but the shell hook doesn't generate them in the first place, so that's better b/c it uses less resources)
+	;if (DllCall("GetAncestor", "Ptr", hWnd, "UInt", 2) != hwnd)
+		;Return
+
+	Global
+	
+	; WS2 is deactivated
+	If ( vWinSize2_Not_Active = 1 )
+		Return
+
+	;  name of process identified by hWnd
+	WinGet , Name  , ProcessName , ahk_id %hWnd%
+	;  list of windows owned by the program
+	WinList1 :=
+	WinList2 :=
+	WinList3 :=
+	WinGet , WinList , List        , ahk_id %hWnd%
+	; title of the window identified by WinList1
+	; If set to <> "": has to be processed next
+	If ( WinList > 0 )
+	{
+		WinGetTitle , Title , ahk_id %WinList1%
+		WinGetClass , Class , ahk_id %WinList1%
+	}
+	; Tooltip ShellMessage %wParam%  %lParam%  "%Name%"
+
+	AW_Title_hWnd := WinList1
+
+	HWND_UniqueID := WinExist( Title )
+	; push to stack
+	Stack_OnOff( "ShellMsg" , 0 )
+	Stack_Push( "ShellMsg" , Title )
+	Stack_Push( "ShellMsg" , Class )
+	Stack_OnOff( "ShellMsg" , 1 )
+	LogText := "PUSH ShellMessage to stack  :" Title ": Cl=" Class ": ID=" HWND_UniqueID ":"
+	mLogFile_Write( 2, LogText )
+
+	; Text := Stack_List( "ShellMsg" )
+	; msgbox Push: %Text%
+
+SetTimer, mProcess_ActiveWindow, -10
+	
 Return
 }
 
 /*
 And a new function handling the shellhook:
-http://shell.codeplex.com/wikipage?title=Shell%20Events&referringTitle=Home&ProjectName=shell
+https://web.archive.org/web/20150107010129/http://shell.codeplex.com/wikipage?title=Shell%20Events
 The wParam will be one of the following:
 
-http://doc.ddart.net/msdn/header/include/winuser.h.html
+https://web.archive.org/web/20090318162820/http://doc.ddart.net/msdn/header/include/winuser.h.html
  *
  * Shell support
  *
-#define HSHELL_WINDOWCREATED        1
-#define HSHELL_WINDOWDESTROYED      2
-#define HSHELL_ACTIVATESHELLWINDOW  3
+HSHELL_ EVENTS OMITTED B/C IT'S NOT VERY CLEAR, A BETTER ONE BELOW
 
-#if(WINVER >= 0x0400)
-#define HSHELL_WINDOWACTIVATED      4
-#define HSHELL_GETMINRECT           5
-#define HSHELL_REDRAW               6
-#define HSHELL_TASKMAN              7
-#define HSHELL_LANGUAGE             8
-#if(_WIN32_WINNT >= 0x0500)
-#define HSHELL_ACCESSIBILITYSTATE   11
-#define    ACCESS_STICKYKEYS            0x0001
-#define    ACCESS_FILTERKEYS            0x0002
-#define    ACCESS_MOUSEKEYS             0x0003
-; _WIN32_WINNT >= 0x0500
-#endif 
-; WINVER >= 0x0400
-#endif 
+https://www.magnumdb.com/search?q=title%3AHSHELL_*
+HSHELL_WINDOWCREATED		1
+HSHELL_WINDOWDESTROYED		2
+HSHELL_ACTIVATESHELLWINDOW	3
+HSHELL_WINDOWACTIVATED		4
+HSHELL_GETMINRECT		5
+HSHELL_REDRAW			6
+HSHELL_TASKMAN			7
+HSHELL_LANGUAGE			8
+HSHELL_SYSMENU			9
+HSHELL_ENDTASK			10
+HSHELL_ACCESSIBILITYSTATE	11
+HSHELL_APPCOMMAND		12
+HSHELL_WINDOWREPLACED		13
+HSHELL_WINDOWREPLACING		14
+HSHELL_MONITORCHANGED		16
+HSHELL_HIGHBIT			32768
+HSHELL_FLASH			32774
+HSHELL_RUDEAPPACTIVATED		32772
+
+None of these were usable for detecting when the user unminimizes an app,
+which is necessary because these HSHELL_ events causes minimized apps to become unminimized/affected by this script
+They should obviously remain minimized. Therefore I'll use a different event watcher as well that's taking over this responsibility
 */
 ShellMessage( wParam, lParam ) 
 {
+	if (A_IsPaused)
+		Return
 	Global
 	
 	; WS2 is deactivated
@@ -521,9 +586,9 @@ ShellMessage( wParam, lParam )
 
 	; If ( Name <> "" )
 	; If ( wParam = 1 )
-	If ( wParam = 1 OR wParam = 2 )
+	If ( wParam = 2 )
 	{
-	;  name of process identified by lParam
+		;  name of process identified by lParam
 		WinGet , Name  , ProcessName , ahk_id %lParam%
 		;  list of windows owned by the program
 		WinList1 :=
@@ -540,7 +605,6 @@ ShellMessage( wParam, lParam )
 		; Tooltip ShellMessage %wParam%  %lParam%  "%Name%"
 
 		AW_Title_hWnd := WinList1
-		
 		
 		If 0   ; If ( wParam = 1 )
 		{
@@ -566,25 +630,8 @@ ShellMessage( wParam, lParam )
 			;* EEEE
 		}
 
-		If ( wParam = 1 )
-		{
-			HWND_UniqueID := WinExist( Title )
-			; push to stack
-			Stack_OnOff( "ShellMsg" , 0 )
-			Stack_Push( "ShellMsg" , Title )
-			Stack_Push( "ShellMsg" , Class )
-			Stack_OnOff( "ShellMsg" , 1 )
-			LogText := "PUSH ShellMessage to stack  :" Title ": Cl=" Class ": ID=" HWND_UniqueID ":"
-			mLogFile_Write( 2, LogText )
-
-			; Text := Stack_List( "ShellMsg" )
-			; msgbox Push: %Text%
-		}
-		If ( wParam = 2 )
-		{
-			LogText := "Window is finished; ShellMessage 2 from Windows"
-			mLogFile_Write( 3, LogText )
-		}
+		LogText := "Window is finished; ShellMessage 2 from Windows"
+		mLogFile_Write( 3, LogText )
 
 	}
 	
@@ -710,7 +757,7 @@ mActWin_Timer:
 		mProcess_ActiveWindow()
 	}
 	
-	SetTimer, mActWin_Timer, On
+	;SetTimer, mActWin_Timer, On
 
 Return
 }
@@ -723,8 +770,8 @@ mActWin_Timer_SetTimer( OnOff )
 {
 	If ( OnOff = 0 )
 		SetTimer, mActWin_Timer, Off
-	Else
-		SetTimer, mActWin_Timer, On
+	;Else
+		;SetTimer, mActWin_Timer, On
 Return
 }
  */
@@ -1291,7 +1338,7 @@ WinGetActiveStatsError:
 					{
 						LogTrace .= ":8a"
 						WinSet AlwaysOnTop, Off, A
-						tooltip WinSet AlwaysOnTop Off 001
+						;tooltip WinSet AlwaysOnTop Off 001
 					}
 				}
 				Else
@@ -1300,7 +1347,7 @@ WinGetActiveStatsError:
 					{
 						LogTrace .= ":8b"
 						WinSet AlwaysOnTop, On, A
-						tooltip WinSet AlwaysOnTop On 002
+						;tooltip WinSet AlwaysOnTop On 002
 					}
 				}
 				
@@ -1403,7 +1450,7 @@ WinSize2_IniScreen_Show()
 	Gui, 2:Font, S12 W800, %FontName%
 	Gui, 2:Add, Picture, x1 y1    h320 w400, WinSize2_IniScreen.jpg
 	Gui, 2:Add, Text, x270 y275 w200 h30 giVersion, %iVersion%
-	Gui, 2:Show, Center h322 w402 Border, WinSize2 INI
+	Gui, 2:Show, Center h322 w402, WinSize2 INI
 Return
 
 iVersion:
@@ -1856,7 +1903,7 @@ CoordMode, ToolTip, Relative
 					If ( Window_AlwaysOnTop )
 					{
 						WinSet AlwaysOnTop, Off, %split_Title%
-						tooltip WinSet AlwaysOnTop Off 003
+						;tooltip WinSet AlwaysOnTop Off 003
 					}
 				}
 				Else
@@ -1864,7 +1911,7 @@ CoordMode, ToolTip, Relative
 					If ( ! Window_AlwaysOnTop )
 					{
 						WinSet AlwaysOnTop, On,  %split_Title%
-						tooltip WinSet AlwaysOnTop On 004
+						;tooltip WinSet AlwaysOnTop On 004
 					}
 				}
 				
@@ -1892,7 +1939,7 @@ CoordMode, ToolTip, Relative
 	IniFile_Write_All = 1 
 	; Sleep %vTooltipPubSleepVeryShort%
 
- 	SetTimer, mActWin_Timer, On
+ 	;SetTimer, mActWin_Timer, On
 Return
 }
 
@@ -2800,9 +2847,9 @@ mIniWrite_All()
 		;*** (1016)  INI file was read - has been overwritten by the user
 		; Message := Message_Get( 1016 ) " / " IniFile_FileTime_Old " / " IniFile_FileTime
 		Message := Message_Get( 1016 )
-		If ( Tooltip_Next() )
-			Tooltip %Message% ,vCtrl_Alt_Y_MouseX,vCtrl_Alt_Y_MouseY,20
-			mLogFile_Write( 1, Message )
+		/*If ( Tooltip_Next() )
+			Tooltip %Message% ,vCtrl_Alt_Y_MouseX,vCtrl_Alt_Y_MouseY,20*/
+		mLogFile_Write( 1, Message )
 	}
 	Else
 	{
